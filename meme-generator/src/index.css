@@ -1,12 +1,5 @@
-* {
-  box-sizing: border-box;
-}
-
 body {
-  font-family: "Karla", sans-serif;
   margin: 0;
-}
-
-main {
-  padding: 36px;
+  padding: 0;
+  font-family: sans-serif;
 }
