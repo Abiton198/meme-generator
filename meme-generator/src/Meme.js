@@ -2,15 +2,17 @@ import React from 'react'
 import memesData from './memesData'
 
 
+
 export default function Meme() {
   
-    const [memeImage, setMemeImage] = React.useState("")
-    
-    
+    const [memeImage, setMemeImage] = React.useState("https://i.imgflip.com/30b1gx.jpg")
+    console.log(memesData.data)
     function getMemeImage() {
+
         const memesArray = memesData.data.memes
-        const randomNumber = Math.floor(Math.random() * memesArray.length)
-        setMemeImage(memesArray[randomNumber].url)
+
+        const randomNumber = Math.floor(Math.random() * memesArray.length) //get a random number
+        setMemeImage(memesArray[randomNumber].url)//url random image from data
         
     }
     
