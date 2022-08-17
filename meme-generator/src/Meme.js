@@ -5,14 +5,28 @@ import memesData from './memesData'
 
 export default function Meme() {
   
-    const [memeImage, setMemeImage] = React.useState("https://i.imgflip.com/30b1gx.jpg")
-    console.log(memesData.data)
+                                        //the data set before change of state
+    const [meme, setMeme] = React.useState({
+                                        topText: "",
+                                        bottomText: "",
+                                        randomImage: "http://i.imgflip.com/1bij.jpg"
+                                        })
+   
+    
+    const [allMemesImages, setAllMemesImage] = React.useState(memesData) 
+
     function getMemeImage() {
 
-        const memesArray = memesData.data.memes
-
+        const memesArray = allMemesImages.data.memes
         const randomNumber = Math.floor(Math.random() * memesArray.length) //get a random number
-        setMemeImage(memesArray[randomNumber].url)//url random image from data
+        const url = memesArray[randomNumber].url
+
+        //the new state after the change/ when a button is clicked
+        setMeme(prevSetMeme => prevSetMeme ({
+                                        ...prevSetMeme,
+                                        randomImage: url
+                                            }))
+
         
     }
     
@@ -31,14 +45,14 @@ export default function Meme() {
                 />
                 <button 
                     className="form--button"
-                    onClick={getMemeImage}
+                    onClick={getMemeImage} //add eventListener
                 >
                     Get a new meme image 🖼
                 </button>
-            </div>
-            <img src={memeImage} className="meme--image" alt=''/>
+            </div> 
+            <img src={meme.randomImage} className="meme--image" alt=''/> 
         </main>
-    )
+    ) //the image that displays when button is clicked
   
 }
   
