@@ -1,44 +1,39 @@
 import React from 'react'
 
 export default function Meme() {
-  
-                                        //the data set before change of state
     const [meme, setMeme] = React.useState({
-                                        topText: "",
-                                        bottomText: "",
-                                        randomImage: "http://i.imgflip.com/1bij.jpg"
-                                        })
+    topText: "",
+    bottomText: "",
+    randomImage: "http://i.imgflip.com/1bij.jpg"
+    })
    
-    
+    //using async func inside a useEffect func
     const [allMemes, setAllMemes] = React.useState([]) 
-
-    //use the useEffect to fetch data outside the boundaries of React
     React.useEffect(()=>{
-        fetch("https://api.imgflip.com/get_memes")
-        .then(res => res.json())
-        .then(data => setAllMemes(data.data.memes))
+        async function getMemes(){
+            const res = await fetch("https://api.imgflip.com/get_memes")
+            const data = await res.json()
+            setAllMemes(data.data.memes)
+        }
+        getMemes()
     },[])
-//[] = dependencies/ no dependencies needed
+
 
     //this func is to get the image display 
     function getMemeImage() {
-
-        const randomNumber = Math.floor(Math.random() * allMemes.length) //get a random number
+        const randomNumber = Math.floor(Math.random() * allMemes.length) 
         const url = allMemes[randomNumber].url
-
-        //the new state after the change/ when a button is clicked
-        setMeme(prevSetMeme => prevSetMeme ({
-                                        ...prevSetMeme,
-                                        randomImage: url
-                                            }))
+        setMeme(prevMeme => ({
+        ...prevMeme,
+        randomImage: url
+        }))
     }
     //function for handling top and bottom text in relation to the image
     function handleChange(event){
-        const[name, value] = event.target
-//making the text appear and linked to the image
+        const{name, value} = event.target
         setMeme(prevMeme => ({
-            ...prevMeme,
-            [name]: value
+        ...prevMeme,
+        [name]: value
         }))
        
     }
@@ -69,13 +64,34 @@ export default function Meme() {
                     Get a new meme image 🖼
                 </button>
             </div> 
-            <img src={meme.randomImage} className="meme--image" alt=''/> 
-            <h2 className='top-text'>{meme.topText}</h2>
-            <h2 className='bottom-text'>{meme.bottomText}</h2>
-        </main>
-    ) //the image that displays when button is clicked
+            <div className='meme'>
+                    <img src={meme.randomImage} className="meme--image" alt=''/> 
+                    <h2 className='meme--top' > {meme.topText} </h2>
+                    <h2 className='meme--bottom' > {meme.bottomText} </h2>
+            </div>
+           
+        </main>//the image that displays when button is clicked
     //text displays as typed
+    ) 
   
 }
   
+/*====NOTES===
 
+ use the useEffect to fetch data outside the boundaries of React
+[] = dependencies/ no dependencies needed
+//making the text appear and linked to the image
+//the state that stores data fetched from API
+//the new state after the change/ when a button is clicked
+//get a random number
+
+*/
+ /**
+    useEffect takes a function as its parameter. If that function
+    returns something, it needs to be a cleanup function. Otherwise,
+    it should return nothing. If we make it an async function, it
+    automatically retuns a promise instead of a function or nothing.
+    Therefore, if you want to use async operations inside of useEffect,
+    you need to define the function separately inside of the callback
+    function, as seen above:
+    */
